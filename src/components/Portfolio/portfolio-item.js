@@ -1,6 +1,6 @@
 import React from "react";
 
-export default function(props) {
+export default function company(props) {
     // Functional components are used for rendering data in afixed way
     // Just pass this data and it will have very low level logic
     return (
