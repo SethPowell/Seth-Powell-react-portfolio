@@ -9,21 +9,28 @@ export default class PortfolioContainer extends Component {
     constructor() {
         super();
         // super must be called in constructors
-        console.log("Portfolio container has rendered")
+
+        // state is essentially just a container for your variables that will change all variable instances dynamically
+        this.state = {
+            pageTitle: "Welcome to my portfolio",
+            data: [
+                {title: "Google"},
+                {title: "Facebook"},
+                {title: "Apple"}
+            ]
+        }
     }
 
     portfolioItems() {
-        const data = ["Google","Facebook","Apple"];
-
-        return data.map(item => {
-            return <PortfolioItem title={item} url={"google.com"}/>
+        return this.state.data.map(item => {
+            return <PortfolioItem title={item.title} url={"google.com"}/>
         })
     }
 
     render() {
         return (
             <div>
-                <h2>Portfolio items go here ...</h2>
+                <h2>{this.state.pageTitle}</h2>
 
                 {this.portfolioItems()}
             </div>
