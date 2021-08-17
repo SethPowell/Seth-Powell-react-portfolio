@@ -13,6 +13,7 @@ export default class PortfolioContainer extends Component {
         // state is essentially just a container for your variables that will change all variable instances dynamically
         this.state = {
             pageTitle: "Welcome to my portfolio",
+            isLoading: false,
             data: [
                 {title: "Google", category: "Search"},
                 {title: "Facebook", category: "SocialMedia" },
@@ -39,6 +40,10 @@ export default class PortfolioContainer extends Component {
     }
 
     render() {
+        if (this.state.isLoading) {
+            return <div>Loading Content...</div>;
+        }
+
         return (
             <div>
                 <h2>{this.state.pageTitle}</h2>
