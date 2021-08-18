@@ -1,4 +1,5 @@
 import React, { Component } from "react";
+import axios from "axios";
 
 import PortfolioItem from "./portfolio-item"
 
@@ -8,18 +9,11 @@ export default class PortfolioContainer extends Component {
     // Constructor is a key word that can only be used in functions
     constructor() {
         super();
-        // super must be called in constructors
-
-        // state is essentially just a container for your variables that will change all variable instances dynamically
+        
         this.state = {
             pageTitle: "Welcome to my portfolio",
             isLoading: false,
-            data: [
-                {title: "Google", category: "Search"},
-                {title: "Facebook", category: "SocialMedia" },
-                {title: "Apple", category: "ConsumerTech"},
-                {title: "Samsung", category: "ConsumerTech"}
-            ]
+            data: []
         }
 
         this.handleFilter = this.handleFilter.bind(this);
@@ -33,10 +27,29 @@ export default class PortfolioContainer extends Component {
         })
     }
 
+    getPortfolioItems() {
+        axios
+          .get('https://sethpowell.devcamp.space/portfolio/portfolio_items')
+          .then(response => {
+            console.log("response data",response);
+            this.setState({
+                data: response.data.portfolio_items
+            })
+          })
+          .catch(error => {
+            console.log(error);
+          })
+    }
+
     portfolioItems() {
         return this.state.data.map(item => {
-            return <PortfolioItem title={item.title} url={"google.com"}/>
+            return <PortfolioItem title={item.title} url={"google.com"} slug={item.slug}/>
         })
+    }
+
+    componentDidMount() {
+        this.getPortfolioItems();
+
     }
 
     render() {
