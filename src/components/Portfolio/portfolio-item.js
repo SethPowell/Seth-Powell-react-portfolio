@@ -2,14 +2,21 @@ import React from "react";
 import {Link} from 'react-router-dom'
 
 export default function company(props) {
-    // Functional components are used for rendering data in afixed way
-    // Just pass this data and it will have very low level logic
+    // data that i'll need
+    //- background img: thumb_image_url
+    // - logo img: logo_url
+    // - description: description
+    // - id: id
+
+    const { id, description, thumb_image_url, logo_url } = props.item
+    // you could also alternatively do props.item.key_name
     return (
         <div>
-            <h2>{props.title}</h2>
-            <h4>{props.url}</h4>
+            <img src={thumb_image_url} />
+            <img src={logo_url} />
+            <div>{description}</div>
 
-            <Link to={`/portfolio/${props.slug}`}>Link</Link>
+            <Link to={`/portfolio/${id}`}>Link</Link>
         </div>
     )
 }
