@@ -11,7 +11,7 @@ export default function company(props) {
     const { id, description, thumb_image_url, logo_url } = props.item
     // you could also alternatively do props.item.key_name
     return (
-        <div>
+        <div className="portfolio-item-wrapper">
             <img src={thumb_image_url} />
             <img src={logo_url} />
             <div>{description}</div>
