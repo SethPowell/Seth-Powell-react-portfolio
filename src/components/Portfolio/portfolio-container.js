@@ -4,9 +4,6 @@ import axios from "axios";
 import PortfolioItem from "./portfolio-item"
 
 export default class PortfolioContainer extends Component {
-    // Class components allow you to access higher logic tools like state and lifecycle hooks
-    // Classes are used for anything that needs to be more dynamic such as communicating with api's
-    // Constructor is a key word that can only be used in functions
     constructor() {
         super();
         
@@ -64,16 +61,12 @@ export default class PortfolioContainer extends Component {
         }
 
         return (
-            <div>
-                <h2>{this.state.pageTitle}</h2>
+            <div className="portfolio-items-wrapper">
+                <button className="btn" onClick={() => this.handleFilter("Search")} >Search Engine</button>
+                <button className="btn" onClick={() => this.handleFilter("SocialMedia")} >Social Media</button>
+                <button className="btn" onClick={() => this.handleFilter("ConsumerTech")} >Consumer Tech</button>
 
-                <button onClick={() => this.handleFilter("Search")} >Search Engine</button>
-                <button onClick={() => this.handleFilter("SocialMedia")} >Social Media</button>
-                <button onClick={() => this.handleFilter("ConsumerTech")} >Consumer Tech</button>
-
-                <div className="portfolio-items-wrapper">
-                    {this.portfolioItems()}
-                </div>
+                {this.portfolioItems()}
             </div>
         );
     }
