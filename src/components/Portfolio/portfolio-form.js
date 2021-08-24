@@ -100,8 +100,8 @@ export default class PortfolioForm extends Component {
                     </div>
 
                     <div>
-                        <input 
-                            type="text" 
+                        <textarea 
+                            type="text"
                             name="description"
                             placeholder="Description"
                             value={this.state.description}
