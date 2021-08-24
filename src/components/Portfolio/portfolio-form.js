@@ -8,7 +8,7 @@ export default class PortfolioForm extends Component {
         this.state = {
             name: "",
             description: "",
-            category: "",
+            category: "Search",
             position: "",
             url: "",
             thumb_image: "",
