@@ -7,10 +7,9 @@ const PortfolioSidebarList = (props) => {
                 <div className="portfolio-item-thumb-img">
                     <img src={portfolioItem.thumb_image_url} alt="thumb image" />
                 </div>
-                <div>
-                    <h1 className="title">{portfolioItem.name}</h1>
-                    <h2>{portfolioItem.id}</h2>
-                </div>
+                <h1 className="title">{portfolioItem.name}</h1>
+                <h2>{portfolioItem.id}</h2>
+                <a onClick={() => props.handleDeleteClick(portfolioItem)}>Delete</a>
             </div>
         );
     });
