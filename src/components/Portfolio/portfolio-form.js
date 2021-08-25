@@ -130,84 +130,80 @@ export default class PortfolioForm extends Component {
 
     render() {
         return (
-            <div>
-                <h1>Portfolio Form</h1>
+            <form onSubmit={this.handleSubmit} className="portfolio-form-wrapper">
+                <div>
+                    <input 
+                        type="text" 
+                        name="name"
+                        placeholder="Portfolio Item Name"
+                        value={this.state.name}
+                        onChange={this.handleChange}
+                    />
+                </div>
 
-                <form onSubmit={this.handleSubmit}>
-                    <div>
-                        <input 
-                            type="text" 
-                            name="name"
-                            placeholder="Portfolio Item Name"
-                            value={this.state.name}
-                            onChange={this.handleChange}
-                        />
-                    </div>
+                <div>
+                    <input 
+                        type="text" 
+                        name="url"
+                        placeholder="URL"
+                        value={this.state.url}
+                        onChange={this.handleChange}
+                    />
+                </div>
 
-                    <div>
-                        <input 
-                            type="text" 
-                            name="url"
-                            placeholder="URL"
-                            value={this.state.url}
-                            onChange={this.handleChange}
-                        />
-                    </div>
+                <div>
+                    <input 
+                        type="text" 
+                        name="position"
+                        placeholder="Position"
+                        value={this.state.position}
+                        onChange={this.handleChange}
+                    />
+                </div>
 
-                    <div>
-                        <input 
-                            type="text" 
-                            name="position"
-                            placeholder="Position"
-                            value={this.state.position}
-                            onChange={this.handleChange}
-                        />
-                    </div>
+                <div>
+                    <select name="category" value={this.state.category} onChange={this.handleChange}>
+                        <option value="Search">Search Engine</option>
+                        <option value="ConsumerTech">Consumer Tech</option>
+                        <option value="SocialMedia">Social Media</option>
+                    </select>
+                </div>
 
-                    <div>
-                        <select name="category" value={this.state.category} onChange={this.handleChange}>
-                            <option value="Search">Search Engine</option>
-                            <option value="ConsumerTech">Consumer Tech</option>
-                            <option value="SocialMedia">Social Media</option>
-                        </select>
-                    </div>
+                <div>
+                    <textarea 
+                        type="text"
+                        name="description"
+                        placeholder="Description"
+                        value={this.state.description}
+                        onChange={this.handleChange}
+                    />
+                </div>
 
-                    <div>
-                        <textarea 
-                            type="text"
-                            name="description"
-                            placeholder="Description"
-                            value={this.state.description}
-                            onChange={this.handleChange}
-                        />
-                    </div>
+                <div className="image-uploaders">
+                    <DropzoneComponent
+                        ref={this.thumbRef}
+                        config={this.componentConfig()}
+                        djsConfig={this.djsConfig()}
+                        eventHandlers={this.handleThumbDrop()}
+                    />
+                    <DropzoneComponent
+                        ref={this.bannerRef}
+                        config={this.componentConfig()}
+                        djsConfig={this.djsConfig()}
+                        eventHandlers={this.handleBannerDrop()}
+                    />
+                    <DropzoneComponent
+                        ref={this.logoRef}
+                        config={this.componentConfig()}
+                        djsConfig={this.djsConfig()}
+                        eventHandlers={this.handleLogoDrop()}
+                    />
+                </div>
 
-                    <div className="image-uploaders">
-                        <DropzoneComponent
-                            ref={this.thumbRef}
-                            config={this.componentConfig()}
-                            djsConfig={this.djsConfig()}
-                            eventHandlers={this.handleThumbDrop()}
-                        />
-                        <DropzoneComponent
-                            ref={this.bannerRef}
-                            config={this.componentConfig()}
-                            djsConfig={this.djsConfig()}
-                            eventHandlers={this.handleBannerDrop()}
-                        />
-                        <DropzoneComponent
-                            ref={this.logoRef}
-                            config={this.componentConfig()}
-                            djsConfig={this.djsConfig()}
-                            eventHandlers={this.handleLogoDrop()}
-                        />
-                    </div>
-
-                    <div>
-                        <button type="submit">Save</button>
-                    </div>
-                </form>
-            </div>
+                <div>
+                    <button type="submit">Save</button>
+                </div>
+            </form>
         )
     }
 }
