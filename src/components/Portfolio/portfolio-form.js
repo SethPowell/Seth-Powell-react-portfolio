@@ -4,217 +4,256 @@ import DropzoneComponent from "react-dropzone-component";
 
 import "../../../node_modules/react-dropzone-component/styles/filepicker.css";
 import "../../../node_modules/dropzone/dist/min/dropzone.min.css";
+import { relativeTimeThreshold } from "moment";
 
 export default class PortfolioForm extends Component {
-  constructor(props) {
-    super(props);
+    constructor(props) {
+        super(props);
 
-    this.state = {
-      name: "",
-      description: "",
-      category: "Search",
-      position: "",
-      url: "",
-      thumb_image: "",
-      banner_image: "",
-      logo: "",
-    };
+        this.state = {
+            name: "",
+            description: "",
+            category: "Search",
+            position: "",
+            url: "",
+            thumb_image: "",
+            banner_image: "",
+            logo: "",
+        };
 
-    this.handleChange = this.handleChange.bind(this);
-    this.handleSubmit = this.handleSubmit.bind(this);
-    this.componentConfig = this.componentConfig.bind(this);
-    this.djsConfig = this.djsConfig.bind(this);
-    this.handleThumbDrop = this.handleThumbDrop.bind(this);
-    this.handleBannerDrop = this.handleBannerDrop.bind(this);
-    this.handleLogoDrop = this.handleLogoDrop.bind(this);
+        this.handleChange = this.handleChange.bind(this);
+        this.handleSubmit = this.handleSubmit.bind(this);
+        this.componentConfig = this.componentConfig.bind(this);
+        this.djsConfig = this.djsConfig.bind(this);
+        this.handleThumbDrop = this.handleThumbDrop.bind(this);
+        this.handleBannerDrop = this.handleBannerDrop.bind(this);
+        this.handleLogoDrop = this.handleLogoDrop.bind(this);
 
-    this.thumbRef = React.createRef();
-    this.bannerRef = React.createRef();
-    this.logoRef = React.createRef();
-  }
-
-  handleThumbDrop() {
-    return {
-      addedfile: (file) => this.setState({ thumb_image: file }),
-    };
-  }
-
-  handleBannerDrop() {
-    return {
-      addedfile: (file) => this.setState({ banner_image: file }),
-    };
-  }
-
-  handleLogoDrop() {
-    return {
-      addedfile: (file) => this.setState({ logo: file }),
-    };
-  }
-
-  componentConfig() {
-    return {
-      iconFiletypes: [".jpg", ".png"],
-      showFiletypeIcon: true,
-      postUrl: "https://httpbin.org/post",
-    };
-  }
-
-  djsConfig() {
-    return {
-      addRemoveLinks: true,
-      maxFiles: 1,
-    };
-  }
-
-  buildForm() {
-    let formData = new FormData();
-
-    formData.append("portfolio_item[name]", this.state.name);
-    formData.append("portfolio_item[description]", this.state.description);
-    formData.append("portfolio_item[url]", this.state.url);
-    formData.append("portfolio_item[category]", this.state.category);
-    formData.append("portfolio_item[position]", this.state.position);
-
-    if (this.state.thumb_image) {
-      formData.append("portfolio_item[thumb_image]", this.state.thumb_image);
+        this.thumbRef = React.createRef();
+        this.bannerRef = React.createRef();
+        this.logoRef = React.createRef();
     }
 
-    if (this.state.banner_image) {
-      formData.append("portfolio_item[banner_image]", this.state.banner_image);
+    componentDidUpdate() {
+        if (Object.keys(this.props.portfolioToEdit).length > 0) {
+            const {
+                id,
+                name,
+                description,
+                category,
+                position,
+                url,
+                thumb_image_url,
+                banner_image_url,
+                logo_url,
+            } = this.props.portfolioToEdit;
+
+            this.props.clearPortfolioToEdit();
+
+            this.setState({
+                id: id,
+                name: name || "",
+                description: description || "",
+                category: category || "Search",
+                position: position || "",
+                url: url || "",
+            });
+        }
     }
 
-    if (this.state.logo) {
-      formData.append("portfolio_item[logo]", this.state.logo);
+    handleThumbDrop() {
+        return {
+            addedfile: (file) => this.setState({ thumb_image: file }),
+        };
     }
 
-    return formData;
-  }
+    handleBannerDrop() {
+        return {
+            addedfile: (file) => this.setState({ banner_image: file }),
+        };
+    }
 
-  handleChange(event) {
-    this.setState({
-      [event.target.name]: event.target.value,
-    });
-  }
+    handleLogoDrop() {
+        return {
+            addedfile: (file) => this.setState({ logo: file }),
+        };
+    }
 
-  handleSubmit(event) {
-    axios
-      .post(
-        "https://sethpowell.devcamp.space/portfolio/portfolio_items",
-        this.buildForm(),
-        { withCredentials: true }
-      )
-      .then((response) => {
-        this.props.handleSuccessfulFormSubmission(response.data.portfolio_item);
+    componentConfig() {
+        return {
+            iconFiletypes: [".jpg", ".png"],
+            showFiletypeIcon: true,
+            postUrl: "https://httpbin.org/post",
+        };
+    }
 
+    djsConfig() {
+        return {
+            addRemoveLinks: true,
+            maxFiles: 1,
+        };
+    }
+
+    buildForm() {
+        let formData = new FormData();
+
+        formData.append("portfolio_item[name]", this.state.name);
+        formData.append("portfolio_item[description]", this.state.description);
+        formData.append("portfolio_item[url]", this.state.url);
+        formData.append("portfolio_item[category]", this.state.category);
+        formData.append("portfolio_item[position]", this.state.position);
+
+        if (this.state.thumb_image) {
+            formData.append(
+                "portfolio_item[thumb_image]",
+                this.state.thumb_image
+            );
+        }
+
+        if (this.state.banner_image) {
+            formData.append(
+                "portfolio_item[banner_image]",
+                this.state.banner_image
+            );
+        }
+
+        if (this.state.logo) {
+            formData.append("portfolio_item[logo]", this.state.logo);
+        }
+
+        return formData;
+    }
+
+    handleChange(event) {
         this.setState({
-          name: "",
-          description: "",
-          category: "Search",
-          position: "",
-          url: "",
-          thumb_image: "",
-          banner_image: "",
-          logo: "",
+            [event.target.name]: event.target.value,
         });
+    }
 
-        [this.thumbRef, this.bannerRef, this.logoRef].forEach((ref) => {
-          ref.current.dropzone.removeAllFiles();
-        });
-      })
-      .catch((error) => {
-        console.log("portfolio form handleSubmit error: ", error);
-      });
+    handleSubmit(event) {
+        axios
+            .post(
+                "https://sethpowell.devcamp.space/portfolio/portfolio_items",
+                this.buildForm(),
+                { withCredentials: true }
+            )
+            .then((response) => {
+                this.props.handleSuccessfulFormSubmission(
+                    response.data.portfolio_item
+                );
 
-    event.preventDefault();
-  }
+                this.setState({
+                    name: "",
+                    description: "",
+                    category: "Search",
+                    position: "",
+                    url: "",
+                    thumb_image: "",
+                    banner_image: "",
+                    logo: "",
+                });
 
-  render() {
-    return (
-      <form onSubmit={this.handleSubmit} className="portfolio-form-wrapper">
-        <div className="two-column">
-          <input
-            type="text"
-            name="name"
-            placeholder="Portfolio Item Name"
-            value={this.state.name}
-            onChange={this.handleChange}
-          />
+                [this.thumbRef, this.bannerRef, this.logoRef].forEach((ref) => {
+                    ref.current.dropzone.removeAllFiles();
+                });
+            })
+            .catch((error) => {
+                console.log("portfolio form handleSubmit error: ", error);
+            });
 
-          <input
-            type="text"
-            name="url"
-            placeholder="URL"
-            value={this.state.url}
-            onChange={this.handleChange}
-          />
-        </div>
+        event.preventDefault();
+    }
 
-        <div className="two-column">
-          <input
-            type="text"
-            name="position"
-            placeholder="Position"
-            value={this.state.position}
-            onChange={this.handleChange}
-          />
+    render() {
+        return (
+            <form
+                onSubmit={this.handleSubmit}
+                className="portfolio-form-wrapper"
+            >
+                <div className="two-column">
+                    <input
+                        type="text"
+                        name="name"
+                        placeholder="Portfolio Item Name"
+                        value={this.state.name}
+                        onChange={this.handleChange}
+                    />
 
-          <select
-            name="category"
-            value={this.state.category}
-            onChange={this.handleChange}
-            className="select-element"
-          >
-            <option value="Search">Search Engine</option>
-            <option value="ConsumerTech">Consumer Tech</option>
-            <option value="SocialMedia">Social Media</option>
-          </select>
-        </div>
+                    <input
+                        type="text"
+                        name="url"
+                        placeholder="URL"
+                        value={this.state.url}
+                        onChange={this.handleChange}
+                    />
+                </div>
 
-        <div className="one-column">
-          <textarea
-            type="text"
-            name="description"
-            placeholder="Description"
-            value={this.state.description}
-            onChange={this.handleChange}
-          />
-        </div>
+                <div className="two-column">
+                    <input
+                        type="text"
+                        name="position"
+                        placeholder="Position"
+                        value={this.state.position}
+                        onChange={this.handleChange}
+                    />
 
-        <div className="image-uploaders">
-          <DropzoneComponent
-            ref={this.thumbRef}
-            config={this.componentConfig()}
-            djsConfig={this.djsConfig()}
-            eventHandlers={this.handleThumbDrop()}
-          >
-            <div className="dz-message">Thumbnail Img</div>
-          </DropzoneComponent>
+                    <select
+                        name="category"
+                        value={this.state.category}
+                        onChange={this.handleChange}
+                        className="select-element"
+                    >
+                        <option value="Search">Search Engine</option>
+                        <option value="ConsumerTech">Consumer Tech</option>
+                        <option value="SocialMedia">Social Media</option>
+                    </select>
+                </div>
 
-          <DropzoneComponent
-            ref={this.bannerRef}
-            config={this.componentConfig()}
-            djsConfig={this.djsConfig()}
-            eventHandlers={this.handleBannerDrop()}
-          >
-            <div className="dz-message">Banner Img</div>
-          </DropzoneComponent>
+                <div className="one-column">
+                    <textarea
+                        type="text"
+                        name="description"
+                        placeholder="Description"
+                        value={this.state.description}
+                        onChange={this.handleChange}
+                    />
+                </div>
 
-          <DropzoneComponent
-            ref={this.logoRef}
-            config={this.componentConfig()}
-            djsConfig={this.djsConfig()}
-            eventHandlers={this.handleLogoDrop()}
-          >
-            <div className="dz-message">Logo Img</div>
-          </DropzoneComponent>
-        </div>
+                <div className="image-uploaders">
+                    <DropzoneComponent
+                        ref={this.thumbRef}
+                        config={this.componentConfig()}
+                        djsConfig={this.djsConfig()}
+                        eventHandlers={this.handleThumbDrop()}
+                    >
+                        <div className="dz-message">Thumbnail Img</div>
+                    </DropzoneComponent>
 
-        <div>
-          <button className="btn" type="submit">
-            Save
-          </button>
-        </div>
-      </form>
-    );
-  }
+                    <DropzoneComponent
+                        ref={this.bannerRef}
+                        config={this.componentConfig()}
+                        djsConfig={this.djsConfig()}
+                        eventHandlers={this.handleBannerDrop()}
+                    >
+                        <div className="dz-message">Banner Img</div>
+                    </DropzoneComponent>
+
+                    <DropzoneComponent
+                        ref={this.logoRef}
+                        config={this.componentConfig()}
+                        djsConfig={this.djsConfig()}
+                        eventHandlers={this.handleLogoDrop()}
+                    >
+                        <div className="dz-message">Logo Img</div>
+                    </DropzoneComponent>
+                </div>
+
+                <div>
+                    <button className="btn" type="submit">
+                        Save
+                    </button>
+                </div>
+            </form>
+        );
+    }
 }
