@@ -4,7 +4,6 @@ import DropzoneComponent from "react-dropzone-component";
 
 import "../../../node_modules/react-dropzone-component/styles/filepicker.css";
 import "../../../node_modules/dropzone/dist/min/dropzone.min.css";
-import { relativeTimeThreshold } from "moment";
 
 export default class PortfolioForm extends Component {
 	constructor(props) {
@@ -39,7 +38,19 @@ export default class PortfolioForm extends Component {
 	}
 
 	deleteImage(imageType) {
-		console.log("deleteImage", imageType);
+		axios
+			.delete(
+				`https://api.devcamp.space/portfolio/delete-portfolio-image/${this.state.id}?image_type=${imageType}`,
+				{ withCredentials: true }
+			)
+			.then((response) => {
+				this.setState({
+					[`${imageType}_url`]: "",
+				});
+			})
+			.catch((error) => {
+				console.log("error in deleteImg", error);
+			});
 	}
 
 	componentDidUpdate() {
