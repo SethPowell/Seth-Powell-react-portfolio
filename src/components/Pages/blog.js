@@ -15,7 +15,12 @@ class Blog extends Component {
 
 	activateInfiniteScroll() {
 		window.onscroll = () => {
-			console.log("on scroll trigger");
+			if (
+				window.innerHeight + document.documentElement.scrollTop ===
+				document.documentElement.offsetHeight
+			) {
+				console.log("make another api call ");
+			}
 		};
 	}
 
