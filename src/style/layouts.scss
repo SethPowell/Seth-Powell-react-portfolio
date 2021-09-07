@@ -1,0 +1,18 @@
+.content-page-wrapper {
+	width: 100vw;
+	height: 40vh;
+	display: grid;
+	grid-template-columns: 1fr 1fr;
+
+	.right-column {
+		display: flex;
+		flex-direction: column;
+		justify-content: center;
+		align-items: center;
+		padding: 100px;
+	}
+
+	.left-column {
+		height: calc(100vh - 85px);
+	}
+}
