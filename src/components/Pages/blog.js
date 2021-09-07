@@ -14,8 +14,9 @@ class Blog extends Component {
 			totalCount: 0,
 			currentPage: 0,
 			isLoading: true,
-			blogModalIsOpen: false,
+			blogModalIsOpen: false
 		};
+
 		this.getBlogItems = this.getBlogItems.bind(this);
 		this.onScroll = this.onScroll.bind(this);
 		window.addEventListener("scroll", this.onScroll, false);
@@ -23,24 +24,45 @@ class Blog extends Component {
 		this.handleModalClose = this.handleModalClose.bind(this);
 		this.handleSuccessfulNewBlogSubmission =
 			this.handleSuccessfulNewBlogSubmission.bind(this);
+		this.handleDeleteClick = this.handleDeleteClick.bind(this);
+	}
+
+	handleDeleteClick(blog) {
+		axios
+			.delete(
+				`https://api.devcamp.space/portfolio/portfolio_blogs/${blog.id}`,
+				{ withCredentials: true }
+			)
+			.then((response) => {
+				this.setState({
+					blogItems: this.state.blogItems.filter((blogItem) => {
+						return blog.id !== blogItem.id;
+					})
+				});
+
+				return response.data;
+			})
+			.catch((error) => {
+				console.log("error in handle delete click: ", error);
+			});
 	}
 
 	handleSuccessfulNewBlogSubmission(blog) {
 		this.setState({
 			blogModalIsOpen: false,
-			blogItems: [blog].concat(this.state.blogItems),
+			blogItems: [blog].concat(this.state.blogItems)
 		});
 	}
 
 	handleModalClose() {
 		this.setState({
-			blogModalIsOpen: false,
+			blogModalIsOpen: false
 		});
 	}
 
 	handleNewBlogClick() {
 		this.setState({
-			blogModalIsOpen: true,
+			blogModalIsOpen: true
 		});
 	}
 
@@ -62,14 +84,14 @@ class Blog extends Component {
 
 	getBlogItems() {
 		this.setState({
-			currentPage: this.state.currentPage + 1,
+			currentPage: this.state.currentPage + 1
 		});
 
 		axios
 			.get(
 				`https://sethpowell.devcamp.space/portfolio/portfolio_blogs?page=${this.state.currentPage}`,
 				{
-					withCredentials: true,
+					withCredentials: true
 				}
 			)
 			.then((response) => {
@@ -79,7 +101,7 @@ class Blog extends Component {
 						response.data.portfolio_blogs
 					),
 					totalCount: response.data.meta.total_records,
-					isLoading: false,
+					isLoading: false
 				});
 			})
 			.catch((error) => {
@@ -97,7 +119,18 @@ class Blog extends Component {
 
 	render() {
 		const blogRecords = this.state.blogItems.map((blogItem) => {
-			return <BlogItem key={blogItem.id} blogItem={blogItem} />;
+			if (this.props.loggedInStatus === "LOGGED_IN") {
+				return (
+					<div className="admin-blog-wrapper" key={blogItem.id}>
+						<BlogItem blogItem={blogItem} />
+						<a onClick={() => this.handleDeleteClick(blogItem)}>
+							<FontAwesomeIcon icon="trash" />
+						</a>
+					</div>
+				);
+			} else {
+				return <BlogItem key={blogItem.id} blogItem={blogItem} />;
+			}
 		});
 
 		return (
