@@ -11,7 +11,7 @@ import Blog from "./Pages/blog";
 import BlogDetail from "./Pages/blog-detail";
 import PortfolioManager from "./Pages/portfolio-manager";
 import PortfolioDetail from "./Portfolio/portfolio-detail";
-import Auth from "./pages/auth";
+import Auth from "./Pages/auth";
 import NoMatch from "./Pages/no-match";
 import Icons from "../helpers/icons";
 
